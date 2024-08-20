@@ -24,14 +24,10 @@ const Profile = () => {
         text={"subin"}
         Icon={<UsernameIcon />}
       />
-      <ProfileCard
-        heading={"Name"}
-        text={moment("2024-08-20T00:00:00.000Z").fromNow()}
-        Icon={<FaceIcon />}
-      />
+      <ProfileCard heading={"Name"} text={"Subin Kumar"} Icon={<FaceIcon />} />
       <ProfileCard
         heading={"Joined"}
-        text={"Subin Kumar"}
+        text={moment("2024-08-20T00:00:00.000Z").fromNow()}
         Icon={<Calendericon />}
       />
     </Stack>
