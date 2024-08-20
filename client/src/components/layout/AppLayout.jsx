@@ -4,6 +4,7 @@ import Title from "../shared/Title";
 import ChatList from "../specific/ChatList";
 import Header from "./Header";
 import { Grid } from "@mui/material";
+import Profile from "../specific/Profile";
 
 const AppLayout = () => (WrappedComponent) => {
   // eslint-disable-next-line react/display-name
@@ -51,7 +52,7 @@ const AppLayout = () => (WrappedComponent) => {
             }}
             height={"100%"}
           >
-            Third
+            <Profile />
           </Grid>
         </Grid>
       </>
