@@ -8,6 +8,13 @@ import {
 } from "@mui/icons-material";
 import { InputBox } from "../components/styles/styledComponents";
 import FileMenu from "../components/dialogs/FileMenu";
+import { sampleMessage } from "../constants/sampleData";
+import MessageComponent from "../components/shared/MessageComponent";
+
+const user = {
+  _id: "sfafasfasf",
+  name: "Subin Kumar",
+};
 
 const Chat = () => {
   const containerRef = useRef(null);
@@ -26,7 +33,9 @@ const Chat = () => {
           overflowY: "auto",
         }}
       >
-        {/* Messages Render */}
+        {sampleMessage.map((i) => (
+          <MessageComponent key={i._id} message={i} user={user} />
+        ))}
       </Stack>
 
       <form

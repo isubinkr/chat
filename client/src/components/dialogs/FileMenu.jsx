@@ -2,7 +2,7 @@ import { Menu } from "@mui/material";
 
 const FileMenu = ({ anchorEl }) => {
   return (
-    <Menu anchorEl={anchorEl}>
+    <Menu anchorEl={anchorEl} open={false}>
       <div
         style={{
           width: "10rem",
