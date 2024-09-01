@@ -20,7 +20,7 @@ import {
   KeyboardBackspace as KeyboardBackspaceIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import { matBlack } from "../constants/color";
+import { bgGradient, matBlack } from "../constants/color";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import AvatarCard from "../components/shared/AvatarCard";
@@ -87,8 +87,10 @@ const Groups = () => {
   };
 
   useEffect(() => {
-    setGroupName(`Group Name ${chatId}`);
-    setGroupNameUpdatedValue(`Group Name ${chatId}`);
+    if (chatId) {
+      setGroupName(`Group Name ${chatId}`);
+      setGroupNameUpdatedValue(`Group Name ${chatId}`);
+    }
 
     return () => {
       setGroupName("");
@@ -209,7 +211,6 @@ const Groups = () => {
           },
         }}
         sm={4}
-        bgcolor={"bisque"}
       >
         <GroupsList myGroups={sampleChats} chatId={chatId} />
       </Grid>
@@ -306,7 +307,10 @@ const Groups = () => {
 };
 
 const GroupsList = ({ w = "100%", myGroups = [], chatId }) => (
-  <Stack width={w}>
+  <Stack
+    width={w}
+    sx={{ backgroundImage: bgGradient, height: "100vh", overflow: "auto" }}
+  >
     {myGroups.length > 0 ? (
       myGroups.map((group) => (
         <GroupListItem group={group} chatId={chatId} key={group._id} />
