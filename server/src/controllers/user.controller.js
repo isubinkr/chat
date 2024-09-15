@@ -2,8 +2,9 @@ import bcrypt from "bcrypt";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiRespose.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { cookieOptions, generateToken } from "../utils/features.js";
+import { generateToken } from "../utils/features.js";
 import { ApiError } from "../utils/ApiError.js";
+import { cookieOptions } from "../constants/constants.js";
 
 // create a new user and save it to the db and save in cookie
 const registerUser = asyncHandler(async (req, res) => {
@@ -49,6 +50,22 @@ const login = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { accessToken }, "User logged in successfully"));
 });
 
-const getCurrentUser = asyncHandler(async (req, res) => {});
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "Verification done"));
+});
 
-export { login, registerUser, getCurrentUser };
+const logout = asyncHandler(async (req, res) => {
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
+});
+
+export { login, registerUser, getCurrentUser, logout };
