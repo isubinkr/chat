@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { login, newUser } from "../controllers/user.controller.js";
+import { login, registerUser } from "../controllers/user.controller.js";
+import { singleAvatar } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.route("/new").post(newUser);
+// router.post("/register", singleAvatar, registerUser);
+router.route("/register").post(singleAvatar, registerUser);
 
 router.route("/login").post(login);
 
