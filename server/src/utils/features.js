@@ -5,4 +5,8 @@ const generateToken = (user) => {
   return token;
 };
 
-export { generateToken };
+const emitEvent = (req, event, users, data) => {
+  console.log("Emmiting event", event);
+};
+
+export { generateToken, emitEvent };

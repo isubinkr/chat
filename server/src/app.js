@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { corsOptions } from "./constants/config.js";
 
 const app = express();
 
@@ -13,9 +14,10 @@ app.use(cookieParser());
 
 // routes
 import userRouter from "./routes/user.routes.js";
-import { corsOptions } from "./constants/config.js";
+import chatRouter from "./routes/chat.routes.js";
 
 // routes declaration
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/chat", chatRouter);
 
 export { app };

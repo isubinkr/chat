@@ -68,4 +68,12 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
-export { login, registerUser, getCurrentUser, logout };
+const searchUser = asyncHandler(async (req, res) => {
+  const { name } = req.query;
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "User found successfully"));
+});
+
+export { login, registerUser, getCurrentUser, logout, searchUser };
