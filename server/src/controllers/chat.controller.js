@@ -134,4 +134,88 @@ const addMembers = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Members added successfully"));
 });
 
-export { createGroupChat, getAllChats, getAllUserCreatedGroups, addMembers };
+const removeMember = asyncHandler(async (req, res) => {
+  const { userId, chatId } = req.body;
+
+  const [chat, userToBeRemoved] = await Promise.all([
+    Chat.findById(chatId),
+    User.findById(userId, "name"),
+  ]);
+
+  if (!chat) throw new ApiError(404, "Chat not found");
+
+  if (!chat.groupChat) throw new ApiError(400, "Not a group chat");
+
+  if (chat.creator.toString() !== req.user._id.toString())
+    throw new ApiError(403, "Not allowed to remove member");
+
+  if (chat.members.length <= 3)
+    throw new ApiError(400, "Group must've at least 3 members");
+
+  chat.members = chat.members.filter(
+    (member) => member.toString() !== userId.toString()
+  );
+
+  await chat.save();
+
+  emitEvent(
+    req,
+    ALERT,
+    chat.members,
+    `${userToBeRemoved.name} has been removed from the group`
+  );
+
+  emitEvent(req, REFETCH_CHATS, chat.membes);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Member removed successfully"));
+});
+
+const leaveGroup = asyncHandler(async (req, res) => {
+  const chatId = req.params.id;
+
+  const chat = await Chat.findById(chatId);
+
+  if (!chat) throw new ApiError(404, "Chat not found");
+
+  if (!chat.groupChat) throw new ApiError(400, "Not a group chat");
+
+  const remainingMembers = chat.members.filter(
+    (member) => member.toString() !== req.user._id.toString()
+  );
+
+  if (remainingMembers.length < 3) {
+    throw new ApiError(400, "Group must've at least 3 members");
+  }
+
+  if (chat.creator.toString() === req.user._id.toString()) {
+    const randomElement = Math.floor(Math.random() * remainingMembers.length);
+    const newCreator = remainingMembers[randomElement];
+    chat.creator = newCreator;
+  }
+
+  chat.members = remainingMembers;
+
+  await chat.save();
+
+  emitEvent(
+    req,
+    ALERT,
+    chat.members,
+    `User ${req.user.name} has left the group`
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Left group, successfully"));
+});
+
+export {
+  createGroupChat,
+  getAllChats,
+  getAllUserCreatedGroups,
+  addMembers,
+  removeMember,
+  leaveGroup,
+};

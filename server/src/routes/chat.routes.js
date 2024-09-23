@@ -5,14 +5,19 @@ import {
   createGroupChat,
   getAllChats,
   getAllUserCreatedGroups,
+  leaveGroup,
+  removeMember,
 } from "../controllers/chat.controller.js";
 
 const router = Router();
 
-// secured routes
-router.route("/create-gc").post(verifyJWT, createGroupChat);
-router.route("/allchats").get(verifyJWT, getAllChats);
-router.route("/allucgroups").get(verifyJWT, getAllUserCreatedGroups);
-router.route("/add-members").put(verifyJWT, addMembers);
+router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
+
+router.route("/create-gc").post(createGroupChat);
+router.route("/allchats").get(getAllChats);
+router.route("/allucgroups").get(getAllUserCreatedGroups);
+router.route("/add-members").put(addMembers);
+router.route("/remove-member").put(removeMember);
+router.route("/leave/:id").delete(leaveGroup);
 
 export default router;
