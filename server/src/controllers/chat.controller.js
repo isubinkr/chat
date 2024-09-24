@@ -16,11 +16,7 @@ import { deleteFilesFromCloudinaray, emitEvent } from "../utils/features.js";
 const createGroupChat = asyncHandler(async (req, res) => {
   const { name, members } = req.body;
 
-  if (members.length < 2) {
-    throw new ApiError(400, "Group chat must have at least 3 members");
-  }
-
-  const allMembers = [...members, req.user];
+  const allMembers = [...members, req.user._id];
 
   await Chat.create({
     name,
@@ -96,9 +92,6 @@ const getAllUserCreatedGroups = asyncHandler(async (req, res) => {
 
 const addMembers = asyncHandler(async (req, res) => {
   const { chatId, members } = req.body;
-
-  if (!members || members.length < 1)
-    throw new ApiError(400, "Members not found");
 
   const chat = await Chat.findById(chatId);
 
