@@ -6,3 +6,5 @@ export const cookieOptions = {
   httpOnly: true,
   secure: true,
 };
+
+export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adminhainham";

@@ -1,4 +1,4 @@
-import { body, check, param, query, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import { ApiError } from "../utils/ApiError.js";
 
 const validateHandler = (req, _, next) => {
@@ -18,7 +18,6 @@ const registerValidator = () => [
   body("username", "Please Enter Username").notEmpty(),
   body("bio", "Please Enter Bio").notEmpty(),
   body("password", "Please Enter Password").notEmpty(),
-  check("avatar", "Please Upload Avatar").notEmpty(),
 ];
 
 const loginValidator = () => [
@@ -53,11 +52,6 @@ const chatIdValidator = () => [param("id", "Please Enter Chat Id").notEmpty()];
 
 const sendAttachmentsValidator = () => [
   body("chatId", "Please Enter Chat Id").notEmpty(),
-  check("files")
-    .notEmpty()
-    .withMessage("Please Upload Attachments")
-    .isArray({ min: 1, max: 5 })
-    .withMessage("Attachments must be 1-5"),
 ];
 
 const renameGroupValidator = () => [
@@ -83,16 +77,16 @@ const adminLoginValidator = () => [
 ];
 
 export {
-  validateHandler,
-  registerValidator,
-  loginValidator,
-  createGroupValidator,
-  addMembersValidator,
-  removeMemberValidator,
-  chatIdValidator,
-  sendAttachmentsValidator,
-  renameGroupValidator,
-  sendRequestValidator,
   acceptRequestValidator,
+  addMembersValidator,
   adminLoginValidator,
+  chatIdValidator,
+  createGroupValidator,
+  loginValidator,
+  registerValidator,
+  removeMemberValidator,
+  renameGroupValidator,
+  sendAttachmentsValidator,
+  sendRequestValidator,
+  validateHandler,
 };

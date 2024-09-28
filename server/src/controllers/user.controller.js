@@ -14,6 +14,10 @@ import { getOtherMember } from "../lib/helper.js";
 const registerUser = asyncHandler(async (req, res) => {
   const { name, username, password, bio } = req.body;
 
+  const file = req.file;
+
+  if (!file) throw new ApiError(400, "Avatar file is required");
+
   const avatar = {
     public_id: "Sdgdf",
     url: "asdfaf",

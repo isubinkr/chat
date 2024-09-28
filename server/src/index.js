@@ -1,22 +1,19 @@
 import dotenv from "dotenv";
-import { app } from "./app.js";
+import { httpServer } from "./app.js";
 import connectDB from "./db/index.js";
 
 dotenv.config({
   path: "./.env",
 });
 
-const port = process.env.PORT || 8000;
-export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adminhainham";
-
 connectDB()
   .then(() => {
-    app.on("error", (error) => {
+    httpServer.on("error", (error) => {
       // express app unable to connect
       console.log("ERR: ", error);
       throw error;
     });
-    app.listen(port, () => {
+    httpServer.listen(process.env.PORT || 8000, () => {
       console.log(`Server is running at port: ${process.env.PORT}`);
     });
   })

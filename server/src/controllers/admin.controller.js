@@ -5,8 +5,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiRespose.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { cookieOptions } from "../constants/constants.js";
-import { adminSecretKey } from "../index.js";
+import { adminSecretKey, cookieOptions } from "../constants/constants.js";
 
 const adminLogin = asyncHandler(async (req, res) => {
   const { secretKey } = req.body;

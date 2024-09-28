@@ -213,14 +213,18 @@ const leaveGroup = asyncHandler(async (req, res) => {
 const sendAttachments = asyncHandler(async (req, res) => {
   const { chatId } = req.body;
 
+  const files = req.files || [];
+
+  if (files.length < 1) return new ApiError(400, "Please provide attachments");
+
+  if (files.length > 5) return new ApiError(400, "Max 5 files allowed");
+
   const [chat, user] = await Promise.all([
     Chat.findById(chatId),
     User.findById(req.user._id, "name"),
   ]);
 
   if (!chat) throw new ApiError(404, "Chat not found");
-
-  const files = req.files || [];
 
   if (files.length < 1) throw new ApiError(400, "Please provide attachments");
 
