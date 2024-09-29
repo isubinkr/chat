@@ -1,3 +1,5 @@
+import { useInputValidation } from "6pp";
+import { Search as SearchIcon } from "@mui/icons-material";
 import {
   Dialog,
   DialogTitle,
@@ -6,25 +8,50 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useInputValidation } from "6pp";
-import { Search as SearchIcon } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useAsyncMutation } from "../../hooks/hook";
+import {
+  useLazySearchUserQuery,
+  useSendFriendRequestMutation,
+} from "../../redux/api/api";
+import { setIsSearch } from "../../redux/reducers/misc";
 import UserItem from "../shared/UserItem";
-import { useState } from "react";
-import { sampleUsers } from "../../constants/sampleData";
 
 const Search = () => {
+  const { isSearch } = useSelector((state) => state.misc);
+
+  const [searchUser] = useLazySearchUserQuery();
+  const [sendFriendRequest, isLoadingSendFriendRequest] = useAsyncMutation(
+    useSendFriendRequestMutation
+  );
+
+  const [users, setUsers] = useState([]);
+
+  const dispatch = useDispatch();
+
   const search = useInputValidation("");
 
-  let isLoadingSendFriendRequest = false;
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      searchUser(search.value)
+        .then(({ data }) => setUsers(data.data))
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 1000);
 
-  const [users, setUsers] = useState(sampleUsers);
+    return () => clearTimeout(timeOutId);
+  }, [search.value]);
 
-  const addFriendHandler = (id) => {
-    console.log(id);
+  const addFriendHandler = async (id) => {
+    await sendFriendRequest("Sending Friend request...", { userId: id });
   };
 
+  const searchCloseHandler = () => dispatch(setIsSearch(false));
+
   return (
-    <Dialog open>
+    <Dialog open={isSearch} onClose={searchCloseHandler}>
       <Stack padding={"2rem"} direction={"column"} width={"25rem"}>
         <DialogTitle textAlign={"center"}>Find People </DialogTitle>
         <TextField
