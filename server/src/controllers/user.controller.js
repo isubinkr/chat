@@ -46,6 +46,8 @@ const login = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ username }).select("+password");
 
+  if (!user) throw new ApiError(404, "User does not exist");
+
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) throw new ApiError(401, "Invalid user credentials");

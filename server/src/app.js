@@ -24,11 +24,14 @@ import adminRouter from "./routes/admin.routes.js";
 import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
 import { getSockets } from "./lib/helper.js";
 import { Message } from "./models/message.model.js";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
 
 // routes declaration
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/admin", adminRouter);
+// error middleware
+app.use(errorMiddleware);
 
 // socket io
 const userSocketIds = new Map();
