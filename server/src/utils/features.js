@@ -9,8 +9,4 @@ const emitEvent = (req, event, users, data) => {
   console.log("Emmiting event", event);
 };
 
-const deleteFilesFromCloudinaray = async (publicIds) => {
-  // delete files from cloudinary
-};
-
-export { generateToken, emitEvent, deleteFilesFromCloudinaray };
+export { generateToken, emitEvent };

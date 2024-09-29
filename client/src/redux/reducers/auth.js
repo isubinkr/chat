@@ -15,7 +15,8 @@ const authSlice = createSlice({
       state.loader = false;
     },
     userNotExists: (state) => {
-      (state.user = null), (state.loader = false);
+      state.user = null;
+      state.loader = false;
     },
   },
 });

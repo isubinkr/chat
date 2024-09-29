@@ -11,7 +11,8 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiRespose.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { deleteFilesFromCloudinaray, emitEvent } from "../utils/features.js";
+import { deleteFilesFromCloudinaray } from "../utils/cloudinary.js";
+import { emitEvent } from "../utils/features.js";
 
 const createGroupChat = asyncHandler(async (req, res) => {
   const { name, members } = req.body;

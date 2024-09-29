@@ -9,6 +9,7 @@ import { Chat } from "../models/chat.model.js";
 import { Request } from "../models/request.model.js";
 import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 import { getOtherMember } from "../lib/helper.js";
+import { uploadFilesToCloudinary } from "../utils/cloudinary.js";
 
 // create a new user and save it to the db and save in cookie
 const registerUser = asyncHandler(async (req, res) => {
@@ -18,9 +19,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (!file) throw new ApiError(400, "Avatar file is required");
 
+  const result = await uploadFilesToCloudinary([file]);
+
   const avatar = {
-    public_id: "Sdgdf",
-    url: "asdfaf",
+    public_id: result[0].public_id,
+    url: result[0].url,
   };
 
   const user = await User.create({
@@ -57,7 +60,7 @@ const login = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .cookie("accessToken", accessToken, cookieOptions)
-    .json(new ApiResponse(200, { accessToken }, "User logged in successfully"));
+    .json(new ApiResponse(200, { accessToken }, `Welcome Back ${user.name}`));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -75,7 +78,7 @@ const logout = asyncHandler(async (_, res) => {
   return res
     .status(200)
     .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, {}, "User logged out successfully"));
+    .json(new ApiResponse(200, {}, "Logged out successfully"));
 });
 
 const searchUser = asyncHandler(async (req, res) => {
