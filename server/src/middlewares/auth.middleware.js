@@ -50,4 +50,31 @@ const adminOnly = asyncHandler(async (req, _, next) => {
   }
 });
 
-export { verifyJWT, adminOnly };
+const socketAuthenticator = async (err, socket, next) => {
+  try {
+    if (err) return next(err);
+
+    const authToken = socket.request.cookies.accessToken;
+    // we are directly calling next() with an error instance in it ( eg- next(new ApiError()) )
+    // because we haven't wrapped this socketAuth... fn inside asyncHandler so if any error arises
+    // it won't pass to the error middleware so we are directly passing the control to
+    // error middleware with next(err)
+    if (!authToken)
+      next(new ApiError(401, "Please login to access this route"));
+
+    const decodedData = jwt.verify(authToken, process.env.JWT_SECRET);
+
+    const user = await User.findById(decodedData?._id);
+
+    if (!user) return next(new ApiError(401, "Invalid access token"));
+
+    socket.user = user;
+
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next(new ApiError(401, "Unauthorized"));
+  }
+};
+
+export { verifyJWT, adminOnly, socketAuthenticator };

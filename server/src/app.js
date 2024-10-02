@@ -1,14 +1,19 @@
-import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
-import { corsOptions } from "./constants/config.js";
+import cors from "cors";
+import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuid } from "uuid";
+import { corsOptions } from "./constants/config.js";
+import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
+import { getSockets } from "./lib/helper.js";
+import { socketAuthenticator } from "./middlewares/auth.middleware.js";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
+import { Message } from "./models/message.model.js";
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {});
+const io = new Server(httpServer, { cors: corsOptions });
 
 // CORS configuration
 app.use(cors(corsOptions));
@@ -18,13 +23,9 @@ app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
 
 // routes
-import userRouter from "./routes/user.routes.js";
-import chatRouter from "./routes/chat.routes.js";
 import adminRouter from "./routes/admin.routes.js";
-import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
-import { getSockets } from "./lib/helper.js";
-import { Message } from "./models/message.model.js";
-import { errorMiddleware } from "./middlewares/error.middleware.js";
+import chatRouter from "./routes/chat.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 // routes declaration
 app.use("/api/v1/user", userRouter);
@@ -36,17 +37,20 @@ app.use(errorMiddleware);
 // socket io
 const userSocketIds = new Map();
 
-// io.use((socket, next) => {});
+io.use((socket, next) => {
+  cookieParser()(socket.request, socket.request.res, async (err) => {
+    await socketAuthenticator(err, socket, next);
+  });
+});
 
 io.on("connection", (socket) => {
-  const user = {
-    _id: "Asdfsdfa",
-    name: "Subin",
-  };
+  const user = socket.user;
 
-  userSocketIds.set(user._id, socket.id);
+  userSocketIds.set(user._id.toString(), socket.id);
 
-  console.log("New user connected: ", socket.id);
+  console.log(userSocketIds);
+
+  // console.log("New user connected: ", socket.id);
 
   socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
     const messageForRealTime = {
@@ -84,7 +88,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
-    userSocketIds.delete(user._id);
+    userSocketIds.delete(user._id.toString());
   });
 });
 

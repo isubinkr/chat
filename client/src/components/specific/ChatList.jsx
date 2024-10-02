@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Stack } from "@mui/material";
 import ChatItem from "../shared/ChatItem";
 
