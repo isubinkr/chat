@@ -1,6 +1,6 @@
 import {
   ALERT,
-  NEW_ATTACHMENT,
+  NEW_MESSAGE,
   NEW_MESSAGE_ALERT,
   REFETCH_CHATS,
 } from "../constants/events.js";
@@ -11,7 +11,10 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiRespose.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { deleteFilesFromCloudinaray } from "../utils/cloudinary.js";
+import {
+  deleteFilesFromCloudinaray,
+  uploadFilesToCloudinary,
+} from "../utils/cloudinary.js";
 import { emitEvent } from "../utils/features.js";
 
 const createGroupChat = asyncHandler(async (req, res) => {
@@ -230,7 +233,7 @@ const sendAttachments = asyncHandler(async (req, res) => {
   if (files.length < 1) throw new ApiError(400, "Please provide attachments");
 
   // Upload files here
-  const attachments = [];
+  const attachments = await uploadFilesToCloudinary(files);
 
   const messageForDB = {
     content: "",
@@ -249,7 +252,7 @@ const sendAttachments = asyncHandler(async (req, res) => {
 
   const message = await Message.create(messageForDB);
 
-  emitEvent(req, NEW_ATTACHMENT, chat.members, {
+  emitEvent(req, NEW_MESSAGE, chat.members, {
     message: messageForRealTime,
     chatId,
   });

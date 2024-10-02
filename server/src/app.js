@@ -15,6 +15,8 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: corsOptions });
 
+app.set("io", io);
+
 // CORS configuration
 app.use(cors(corsOptions));
 // config for data coming from json(form)

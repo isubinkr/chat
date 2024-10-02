@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { getSockets } from "../lib/helper.js";
 
 const generateToken = (user) => {
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
@@ -6,7 +7,9 @@ const generateToken = (user) => {
 };
 
 const emitEvent = (req, event, users, data) => {
-  console.log("Emmiting event", event);
+  const io = req.app.get("io");
+  const usersSocket = getSockets(users);
+  io.to(usersSocket).emit(event, data);
 };
 
 export { generateToken, emitEvent };

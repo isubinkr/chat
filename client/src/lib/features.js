@@ -21,7 +21,14 @@ const fileFormat = (url = "") => {
   return "file";
 };
 
-const transformImage = (url = "", width = 100) => url;
+// https://res.cloudinary.com/dmmdvadfq/image/upload/dpr_auto/w_200/v1727896850/a8e47379-8878-46ef-8e1d-c73eee2a3f0c.jpg
+// dpr_auto/w_200
+
+const transformImage = (url = "", width = 100) => {
+  const newUrl = url.replace("upload/", `upload/dpr_auto/w_${width}/`);
+
+  return newUrl;
+};
 
 const getLast7Days = () => {
   const currentDate = moment();
