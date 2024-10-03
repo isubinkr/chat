@@ -3,7 +3,7 @@ import {
   Send as SendIcon,
 } from "@mui/icons-material";
 import { IconButton, Skeleton, Stack } from "@mui/material";
-import { Fragment, useCallback, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import FileMenu from "../components/dialogs/FileMenu";
 import AppLayout from "../components/layout/AppLayout";
 import MessageComponent from "../components/shared/MessageComponent";
@@ -16,6 +16,7 @@ import { getSocket } from "../socket";
 import { useInfiniteScrollTop } from "6pp";
 import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
+import { removeNewMessagesAlert } from "../redux/reducers/chat";
 
 const Chat = ({ chatId, user }) => {
   const containerRef = useRef(null);
@@ -58,9 +59,25 @@ const Chat = ({ chatId, user }) => {
     setMessage("");
   };
 
-  const newMessagesHandler = useCallback((data) => {
-    setMessages((prev) => [...prev, data.message]);
-  }, []);
+  useEffect(() => {
+    dispatch(removeNewMessagesAlert(chatId));
+
+    return () => {
+      setMessage("");
+      setMessages([]);
+      setPage(1);
+      setOldMessages([]);
+    };
+  }, [chatId]);
+
+  const newMessagesHandler = useCallback(
+    (data) => {
+      if (data.chatId !== chatId) return;
+
+      setMessages((prev) => [...prev, data.message]);
+    },
+    [chatId]
+  );
 
   const eventHandler = { [NEW_MESSAGE]: newMessagesHandler };
 
