@@ -5,7 +5,12 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuid } from "uuid";
 import { corsOptions } from "./constants/config.js";
-import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./constants/events.js";
+import {
+  NEW_MESSAGE,
+  NEW_MESSAGE_ALERT,
+  START_TYPING,
+  STOP_TYPING,
+} from "./constants/events.js";
 import { getSockets } from "./lib/helper.js";
 import { socketAuthenticator } from "./middlewares/auth.middleware.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
@@ -86,6 +91,20 @@ io.on("connection", (socket) => {
     } catch (error) {
       console.log(error);
     }
+  });
+
+  socket.on(START_TYPING, ({ members, chatId }) => {
+    console.log("start - typing", chatId);
+
+    const membersSocket = getSockets(members);
+    socket.to(membersSocket).emit(START_TYPING, { chatId });
+  });
+
+  socket.on(STOP_TYPING, ({ members, chatId }) => {
+    console.log("stop - typing", chatId);
+
+    const membersSocket = getSockets(members);
+    socket.to(membersSocket).emit(STOP_TYPING, { chatId });
   });
 
   socket.on("disconnect", () => {
