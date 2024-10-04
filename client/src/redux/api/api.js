@@ -80,6 +80,14 @@ const api = createApi({
         body: data,
       }),
     }),
+
+    myGroups: builder.query({
+      query: () => ({
+        url: "/chat/allucgroups",
+        credentials: "include",
+      }),
+      providesTags: ["Chat"],
+    }),
   }),
 });
 
@@ -94,4 +102,5 @@ export const {
   useChatDetailsQuery,
   useGetMessagesQuery,
   useSendAttachmentsMutation,
+  useMyGroupsQuery,
 } = api;

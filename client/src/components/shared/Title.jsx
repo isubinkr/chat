@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Helmet } from "react-helmet-async";
 
 const Title = ({

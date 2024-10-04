@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
   Close as CloseIcon,
   Dashboard as DashboardIcon,
