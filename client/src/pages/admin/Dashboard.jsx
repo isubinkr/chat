@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
 import AdminLayout from "../../components/layout/AdminLayout";
 import {
