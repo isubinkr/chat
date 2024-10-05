@@ -155,6 +155,8 @@ const removeMember = asyncHandler(async (req, res) => {
   if (chat.members.length <= 3)
     throw new ApiError(400, "Group must've at least 3 members");
 
+  const allChatMembers = chat.members.map((i) => i.toString());
+
   chat.members = chat.members.filter(
     (member) => member.toString() !== userId.toString()
   );
@@ -168,7 +170,7 @@ const removeMember = asyncHandler(async (req, res) => {
     `${userToBeRemoved.name} has been removed from the group`
   );
 
-  emitEvent(req, REFETCH_CHATS, chat.membes);
+  emitEvent(req, REFETCH_CHATS, allChatMembers);
 
   return res
     .status(200)
@@ -367,6 +369,13 @@ const getMessages = asyncHandler(async (req, res) => {
 
   const resultPerPage = 20;
   const skip = (page - 1) * resultPerPage;
+
+  const chat = await Chat.findById(chatId);
+
+  if (!chat) throw new ApiError(404, "Chat not found");
+
+  if (!chat.members.includes(req.user._id.toString()))
+    throw new ApiError(403, "Not allowed");
 
   const [messages, totalMessagesCount] = await Promise.all([
     Message.find({ chat: chatId })
