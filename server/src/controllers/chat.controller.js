@@ -163,12 +163,10 @@ const removeMember = asyncHandler(async (req, res) => {
 
   await chat.save();
 
-  emitEvent(
-    req,
-    ALERT,
-    chat.members,
-    `${userToBeRemoved.name} has been removed from the group`
-  );
+  emitEvent(req, ALERT, chat.members, {
+    chatId,
+    message: `${userToBeRemoved.name} has been removed from the group`,
+  });
 
   emitEvent(req, REFETCH_CHATS, allChatMembers);
 
@@ -204,12 +202,10 @@ const leaveGroup = asyncHandler(async (req, res) => {
 
   await chat.save();
 
-  emitEvent(
-    req,
-    ALERT,
-    chat.members,
-    `User ${req.user.name} has left the group`
-  );
+  emitEvent(req, ALERT, chat.members, {
+    chatId,
+    message: `User ${req.user.name} has left the group`,
+  });
 
   return res
     .status(200)

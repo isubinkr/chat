@@ -20,6 +20,7 @@ import UserItem from "../shared/UserItem";
 
 const Search = () => {
   const { isSearch } = useSelector((state) => state.misc);
+  const dispatch = useDispatch();
 
   const [searchUser] = useLazySearchUserQuery();
   const [sendFriendRequest, isLoadingSendFriendRequest] = useAsyncMutation(
@@ -28,9 +29,13 @@ const Search = () => {
 
   const [users, setUsers] = useState([]);
 
-  const dispatch = useDispatch();
-
   const search = useInputValidation("");
+
+  const addFriendHandler = async (id) => {
+    await sendFriendRequest("Sending Friend request...", { userId: id });
+  };
+
+  const searchCloseHandler = () => dispatch(setIsSearch(false));
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
@@ -43,12 +48,6 @@ const Search = () => {
 
     return () => clearTimeout(timeOutId);
   }, [search.value]);
-
-  const addFriendHandler = async (id) => {
-    await sendFriendRequest("Sending Friend request...", { userId: id });
-  };
-
-  const searchCloseHandler = () => dispatch(setIsSearch(false));
 
   return (
     <Dialog open={isSearch} onClose={searchCloseHandler}>

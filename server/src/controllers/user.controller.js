@@ -36,11 +36,21 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const accessToken = generateToken(user);
 
+  const createdUser = await User.findById(user._id);
+
+  if (!createdUser) {
+    throw new ApiError(500, "Something went wrong while registering the user");
+  }
+
   return res
     .status(201)
     .cookie("accessToken", accessToken, cookieOptions)
     .json(
-      new ApiResponse(200, { accessToken }, "User registered successfully")
+      new ApiResponse(
+        200,
+        { user: createdUser, accessToken },
+        "User registered successfully"
+      )
     );
 });
 
@@ -57,10 +67,18 @@ const login = asyncHandler(async (req, res) => {
 
   const accessToken = generateToken(user);
 
+  const loggedInUser = await User.findById(user._id);
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, cookieOptions)
-    .json(new ApiResponse(200, { accessToken }, `Welcome Back ${user.name}`));
+    .json(
+      new ApiResponse(
+        200,
+        { user: loggedInUser, accessToken },
+        `Welcome Back ${user.name}`
+      )
+    );
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {

@@ -66,7 +66,9 @@ const Groups = () => {
     useRemoveGroupMemberMutation
   );
 
-  const [deleteGroup, isDeleteGroup] = useAsyncMutation(useDeleteChatMutation);
+  const [deleteGroup, isLoadingDeleteGroup] = useAsyncMutation(
+    useDeleteChatMutation
+  );
 
   const [isMoblieMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -146,19 +148,6 @@ const Groups = () => {
   const removeMemberHandler = (userId) => {
     removeMember("Removing Member...", { chatId, userId });
   };
-
-  useEffect(() => {
-    if (chatId) {
-      setGroupName(`Group Name ${chatId}`);
-      setGroupNameUpdatedValue(`Group Name ${chatId}`);
-    }
-
-    return () => {
-      setGroupName("");
-      setGroupNameUpdatedValue("");
-      setIsEdit(false);
-    };
-  }, [chatId]);
 
   const IconBtns = (
     <>
