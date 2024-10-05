@@ -41,7 +41,7 @@ const ProfileCard = ({ text, Icon, heading }) => (
     direction={"row"}
     alignItems={"center"}
     spacing={"1rem"}
-    color={"white"}
+    color={"black"}
     textAlign={"center"}
   >
     {Icon && Icon}

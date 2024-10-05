@@ -1,15 +1,15 @@
-export const orange = "#ea7070";
+export const steelBlue = "#33658A";
 
-export const orangeLight = "rgba(234,112,112,0.2)";
+export const skyBlue = "rgba(134,187,216,0.2)";
 
 export const grayColor = "rgba(247,247,247,1)";
 
-export const lightBlue = "#2694ab";
+export const oliveGreen = "#758E4F";
 
 export const matBlack = "#1c1c1c";
 
 export const bgGradient =
-  "linear-gradient(rgba(200, 200, 200, 0.5), rgb(6 50 122))";
+  "linear-gradient(rgba(200, 200, 200, 0.5), rgb(134 187 216))";
 
 export const purple = "rgba(75,12,192,1)";
 

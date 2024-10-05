@@ -21,7 +21,7 @@ import { lazy, Suspense } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { orange } from "../../constants/color";
+import { steelBlue } from "../../constants/color";
 import { server } from "../../constants/config";
 import { userNotExists } from "../../redux/reducers/auth";
 import { resetNotificationCount } from "../../redux/reducers/chat";
@@ -77,7 +77,7 @@ const Header = () => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }} height={"4rem"}>
-        <AppBar position="static" sx={{ bgcolor: orange }}>
+        <AppBar position="static" sx={{ bgcolor: steelBlue }}>
           <Toolbar>
             <Typography
               variant="h6"

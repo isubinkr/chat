@@ -60,7 +60,7 @@ const socketAuthenticator = async (err, socket, next) => {
     // it won't pass to the error middleware so we are directly passing the control to
     // error middleware with next(err)
     if (!authToken)
-      next(new ApiError(401, "Please login to access this route"));
+      return next(new ApiError(401, "Please login to access this route"));
 
     const decodedData = jwt.verify(authToken, process.env.JWT_SECRET);
 

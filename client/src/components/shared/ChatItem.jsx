@@ -3,6 +3,7 @@ import { memo } from "react";
 import { Link } from "../styles/styledComponents";
 import AvatarCard from "./AvatarCard";
 import { motion } from "framer-motion";
+import { oliveGreen } from "../../constants/color";
 
 const ChatItem = ({
   avatar = [],
@@ -32,8 +33,7 @@ const ChatItem = ({
           gap: "1rem",
           alignItems: "center",
           padding: "1rem",
-          backgroundColor: sameSender ? "black" : "unset",
-          color: sameSender ? "white" : "unset",
+          backgroundColor: sameSender ? "rgba(134,187,216,0.6)" : "unset",
           position: "relative",
         }}
       >
@@ -42,7 +42,9 @@ const ChatItem = ({
         <Stack>
           <Typography>{name}</Typography>
           {newMessageAlert && (
-            <Typography>{newMessageAlert.count} New Message</Typography>
+            <Typography color={oliveGreen}>
+              {newMessageAlert.count} New Message
+            </Typography>
           )}
         </Stack>
 

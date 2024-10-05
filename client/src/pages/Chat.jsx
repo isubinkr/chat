@@ -12,9 +12,11 @@ import AppLayout from "../components/layout/AppLayout";
 import { TypingLoader } from "../components/layout/Loaders";
 import MessageComponent from "../components/shared/MessageComponent";
 import { InputBox } from "../components/styles/styledComponents";
-import { grayColor, orange } from "../constants/color";
+import { grayColor, steelBlue } from "../constants/color";
 import {
   ALERT,
+  CHAT_JOINED,
+  CHAT_LEFT,
   NEW_MESSAGE,
   START_TYPING,
   STOP_TYPING,
@@ -83,13 +85,16 @@ const Chat = ({ chatId, user }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     if (!message.trim()) return;
+
     // Emitting message to the server
     socket.emit(NEW_MESSAGE, { chatId, members, message });
     setMessage("");
   };
 
   useEffect(() => {
+    socket.emit(CHAT_JOINED, { userId: user._id, members });
     dispatch(removeNewMessagesAlert(chatId));
 
     return () => {
@@ -97,6 +102,7 @@ const Chat = ({ chatId, user }) => {
       setMessages([]);
       setPage(1);
       setOldMessages([]);
+      socket.emit(CHAT_LEFT, { userId: user._id, members });
     };
   }, [chatId]);
 
@@ -225,12 +231,12 @@ const Chat = ({ chatId, user }) => {
           <IconButton
             type="submit"
             sx={{
-              bgcolor: orange,
+              bgcolor: steelBlue,
               color: "white",
               marginLeft: "1rem",
               padding: "0.5rem",
               "&: hover": {
-                bgcolor: "error.dark",
+                bgcolor: "#758E4F",
               },
             }}
           >

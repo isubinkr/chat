@@ -10,12 +10,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { Doughnut, Line } from "react-chartjs-2";
-import {
-  orange,
-  orangeLight,
-  purple,
-  purpleLight,
-} from "../../constants/color";
+import { steelBlue, skyBlue, purple, purpleLight } from "../../constants/color";
 import { getLast7Days } from "../../lib/features";
 
 ChartJS.register(
@@ -90,9 +85,9 @@ const DoughnutChart = ({ value = [], labels = [] }) => {
     datasets: [
       {
         data: value,
-        backgroundColor: [purpleLight, orangeLight],
-        hoverBackgroundColor: [purple, orange],
-        borderColor: [purple, orange],
+        backgroundColor: [purpleLight, skyBlue],
+        hoverBackgroundColor: [purple, steelBlue],
+        borderColor: [purple, steelBlue],
         offset: 40,
       },
     ],
