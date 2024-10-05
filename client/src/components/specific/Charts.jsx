@@ -1,16 +1,15 @@
-import { Line, Doughnut } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  Tooltip,
-  Filler,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
   ArcElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
   Legend,
-  plugins,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
 } from "chart.js";
+import { Doughnut, Line } from "react-chartjs-2";
 import {
   orange,
   orangeLight,
@@ -64,7 +63,7 @@ const LineChart = ({ value = [] }) => {
     datasets: [
       {
         data: value,
-        label: "Revenue",
+        label: "Messages",
         fill: true,
         backgroundColor: purpleLight,
         borderColor: purple,
@@ -108,4 +107,4 @@ const DoughnutChart = ({ value = [], labels = [] }) => {
   );
 };
 
-export { LineChart, DoughnutChart };
+export { DoughnutChart, LineChart };
